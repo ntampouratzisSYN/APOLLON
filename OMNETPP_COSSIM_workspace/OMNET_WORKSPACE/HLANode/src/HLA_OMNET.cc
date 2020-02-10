@@ -39,7 +39,7 @@ static PrettyDebug D("HLA_OMNET", __FILE__);
 /** Constructor
  */
 HLA_OMNET::HLA_OMNET(std::string federate_name, int node, int _TotalNodes)
-    : rtiamb(federate_name, node, _TotalNodes),
+    : rtiamb(),
       federateName(federate_name),
       Node(node),
       TotalNodes(_TotalNodes),
