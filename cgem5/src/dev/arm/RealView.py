@@ -279,6 +279,14 @@ class Pl050(AmbaIntDevice):
     is_mouse = Param.Bool(False, "Is this interface a mouse, if not a keyboard")
     int_delay = '1us'
     amba_id = 0x00141050
+    
+class COSSIMSensorDevice(AmbaIntDevice):
+    type = 'COSSIMSensorDevice'
+    cxx_header = "dev/arm/COSSIMSensorDevice.hh"
+    pio_size = Param.Addr(0xFFF, "Size of address range")
+    nodeNum = Param.Int("Node Number")
+    int_delay = '1us'
+    amba_id = 0x00141051        
 
 class Pl111(AmbaDmaDevice):
     type = 'Pl111'
@@ -340,6 +348,9 @@ class RealView(Platform):
                 d.clk_domain = clkdomain
 
     def attachPciDevices(self):
+        pass
+    
+    def attachSensorDevice(self):
         pass
 
     def enableMSIX(self):
@@ -455,6 +466,7 @@ class RealViewPBX(RealView):
        self.clcd.dma          = bus.slave
        self.kmi0.pio          = bus.master
        self.kmi1.pio          = bus.master
+       self.sensordev.pio     = bus.master
        self.cf_ctrl.pio       = bus.master
        self.cf_ctrl.dma       = bus.slave
        self.dmac_fake.pio     = bus.master
@@ -485,6 +497,7 @@ class RealViewPBX(RealView):
         self.clcd.clk_domain          = clkdomain
         self.kmi0.clk_domain          = clkdomain
         self.kmi1.clk_domain          = clkdomain
+        self.sensordev.clk_domain     = clkdomain
         self.cf_ctrl.clk_domain       = clkdomain
         self.dmac_fake.clk_domain     = clkdomain
         self.uart1_fake.clk_domain    = clkdomain
@@ -729,6 +742,10 @@ class VExpress_EMM(RealView):
                                    InterruptLine=1, InterruptPin=1)
         self.ide = IdeController(disks = [], pci_bus=0, pci_dev=1, pci_func=0,
                                  InterruptLine=2, InterruptPin=2)
+        
+    # Attach the COSSIMSensorDevice
+    def attachSensorDevice(self, _nodeNumber):
+        self.sensordev = COSSIMSensorDevice(pio_addr=0x1c061000, int_num=54, nodeNum=_nodeNumber) #COSSIMSensorDevice        
 
     def enableMSIX(self):
         self.gic = Pl390(dist_addr=0x2C001000, cpu_addr=0x2C002000, it_lines=512)
