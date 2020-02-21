@@ -269,6 +269,9 @@ def makeArmSystem(mem_mode, machine_type, num_cpus=1, mdesc=None,
 
     # Attach any PCI devices this platform supports
     self.realview.attachPciDevices()
+	
+    # Attach APOLLON Sensor device
+    self.realview.attachSensorDevice(nodeNum)	
 
     self.cf0 = CowIdeDisk(driveID='master')
     self.cf0.childImage(mdesc.disk())
