@@ -349,9 +349,6 @@ class RealView(Platform):
 
     def attachPciDevices(self):
         pass
-    
-    def attachSensorDevice(self):
-        pass
 
     def enableMSIX(self):
         pass
@@ -466,7 +463,6 @@ class RealViewPBX(RealView):
        self.clcd.dma          = bus.slave
        self.kmi0.pio          = bus.master
        self.kmi1.pio          = bus.master
-       self.sensordev.pio     = bus.master
        self.cf_ctrl.pio       = bus.master
        self.cf_ctrl.dma       = bus.slave
        self.dmac_fake.pio     = bus.master
@@ -497,7 +493,6 @@ class RealViewPBX(RealView):
         self.clcd.clk_domain          = clkdomain
         self.kmi0.clk_domain          = clkdomain
         self.kmi1.clk_domain          = clkdomain
-        self.sensordev.clk_domain     = clkdomain
         self.cf_ctrl.clk_domain       = clkdomain
         self.dmac_fake.clk_domain     = clkdomain
         self.uart1_fake.clk_domain    = clkdomain
@@ -734,6 +729,8 @@ class VExpress_EMM(RealView):
             devices.append(self.ide)
         if hasattr(self, "ethernet"):
             devices.append(self.ethernet)
+        if hasattr(self, "sensordev"):
+            devices.append(self.sensordev) 
         return devices
 
     # Attach any PCI devices that are supported
