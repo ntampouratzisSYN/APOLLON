@@ -934,7 +934,12 @@ Interrupts:
             self.pci_host,
             self.energy_ctrl,
             self.ethernet, #APOLLON
+            self.sensordev, #APOLLON
         ]
+    
+    # Attach the COSSIMSensorDevice
+    def attachSensorDevice(self, _nodeNumber):
+        self.sensordev = COSSIMSensorDevice(pio_addr=0x1c061000, int_num=54, nodeNum=_nodeNumber) #COSSIMSensorDevice (APOLLON) 
     
     def attachPciDevices(self):
         self.ethernet = IGbE_e1000(pci_bus=0, pci_dev=0, pci_func=0, #APOLLON
